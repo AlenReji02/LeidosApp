@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% extends 'leidos_app/base.html' %}
+{% load static %}
+
+<html>
+<head>
+    {% block title_block %}
+    Sign Up
+    {% endblock %}
+</head>
+
+{% block head_block %}
+    <link rel="stylesheet" href="{% static 'form.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<h1 class="form.h1">Sign Up Here!</h1>
+    <div class="container p-4 mt-5" style="width: 75%;">
+        <form class="row g-3" method="post" action="{% url 'leidos_app:register' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="col-md-6" aria-required="true">
+                <label for="id_username" class="form-label">Username</label>
+                {{ user_form.username }}
+            </div>
+            <div class="col-md-6" aria-required="true">
+                 <label for="id_password" class="form-label">Password</label>
+                {{ user_form.password }}
+            </div>
+            <div class="col-md-6">
+                 <label for="id_profile_pic" class="form-label">Profile Picture</label>
+                {{ profile_form.profile_pic }}
+            </div>
+            <div class="col-md-6">
+                 <label for="id_is_buiness_owner" class="form-label">Are You Business Owner?</label>
+                {{ profile_form.is_business_owner }}
+            </div>
+            <input class="btn btn-primary" type="submit" value="Register" />
+        </form>
+    </div>
+{% endblock %}
+</html>

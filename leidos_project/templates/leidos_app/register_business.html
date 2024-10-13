@@ -1,0 +1,84 @@
+{% extends 'leidos_app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+Register Your Business
+{% endblock %}
+
+{% block head_block %}
+        <link rel="stylesheet" href="{% static 'form.css' %}">
+
+{% endblock %}
+
+{% block body_block %}
+<script  
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOLE9zYh4J-uU_dO_iykrtcu0YOL3f7_Y&callback=initialize&libraries=places&v=weekly"
+async>
+</script>
+<style>
+	#content{
+    margin-left: 50px;
+	}
+
+	#head{
+    text-align: center;
+	}
+</style>
+     <div id="content">
+        <h1 id="head">Register Business Here!</h1>
+		 <div class="container p-3 mt-5">
+       <form
+			id="form"
+			method="post"
+			action="{% url 'leidos_app:register_business' %}"
+			enctype="multipart/form-data"
+			class="row g-3">
+				{% csrf_token %}
+
+				<div class="col-md-6" aria-required="true">
+
+                    <label for="id_name" class="form-label" >Business Name</label>
+                    {{ form.name }}
+
+                    <label for="id_address" class="form-label" >Business Address</label>
+                    {{ form.address }}
+
+                    <label for="id_img" class="form-label" >Business Cover Image</label>
+                    {{ form.img }}
+
+                </div>
+
+		   		<div class="col-md-6" aria-required="true">
+
+                    <label for="id_description" class="form-label" >Business Description</label>
+                    {{ form.description }}
+
+                </div>
+				
+				{{form.lat}}
+
+				{{form.long}}
+
+				<button class="btn btn-primary" type="submit">Register</button>
+        </form>
+		 </div>
+    </div>
+
+	<script>
+        function initialize() {
+        	var input = document.getElementById('id_address');
+        	var autocomplete = new google.maps.places.Autocomplete(input, { types: ["geocode"] });
+			autocomplete.setFields(["address_component","geometry"]);
+        	autocomplete.addListener('place_changed', function() {
+    			console.log("lat=" + autocomplete.getPlace().geometry.location.lat());
+				console.log("long=" + autocomplete.getPlace().geometry.location.lng());
+    			console.log(autocomplete.getPlace().geometry.location.toUrlValue(6));
+				document.getElementById('id_lat').value = autocomplete.getPlace().geometry.location.lat()
+				document.getElementById('id_long').value = autocomplete.getPlace().geometry.location.lng()
+  			});
+		}
+
+		google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+{% endblock %}
